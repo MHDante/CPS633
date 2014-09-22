@@ -81,6 +81,9 @@
     <ClCompile Include="ClientResponseAuth.c" />
     <ClCompile Include="OLMHash.c" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HashFunctions.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

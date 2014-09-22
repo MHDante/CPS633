@@ -2,6 +2,7 @@
 #pragma warning (disable:4996)
 #include <stdio.h>
 #include <string.h>
+#include "HashFunctions.h"
 
 #define MAX_USERS 100
 #define MAX_USERNAME_LENGTH 32
@@ -13,9 +14,6 @@ char passwords[MAX_USERS][MAX_PASSWORD_LENGTH];
 int attempts[MAX_USERS];
 
 int currentUserAmount = 0;
-
-void E(char *in, char *out);
-void Hashify(char * password);
 
 int checkUserNameTable(const char * username)
 {
@@ -118,32 +116,5 @@ int main()
 	return 0;
 }
 
-void strToUpper(char * str)
-{
-	while (*str)
-	{
-		*str = toupper(*str);
-		str++;
-	}
-}
-
-
-void Hashify(char * password){
-	strToUpper(password);
-	E(password, password);
-	E(&password[4], &password[4]);
-	E(&password[8], &password[8]);
-}
-
-/********************* E function *************************/
-// DES replacement cipher
-// The function E takes 4 bytes from *in as input and
-// writes 4 bytes to *out
-void E(char *in, char *out)
-{
-	out[0] = (in[0] & 0x80) ^ (((in[0] >> 1) & 0x7F) ^ ((in[0]) & 0x7F));
-	out[1] = ((in[1] & 0x80) ^ ((in[0] << 7) & 0x80)) ^ (((in[1] >> 1) & 0x7F) ^ ((in[1]) & 0x7F));
-	out[2] = ((in[2] & 0x80) ^ ((in[1] << 7) & 0x80)) ^ (((in[2] >> 1) & 0x7F) ^ ((in[2]) & 0x7F));
-	out[3] = ((in[3] & 0x80) ^ ((in[2] << 7) & 0x80)) ^ (((in[3] >> 1) & 0x7F) ^ ((in[3]) & 0x7F));
-}
+
 
