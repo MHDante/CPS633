@@ -18,5 +18,8 @@
     <ClCompile Include="OLMHash.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ClientResponseAuth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
