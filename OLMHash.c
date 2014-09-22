@@ -15,52 +15,30 @@ int attempts[MAX_USERS];
 
 int currentUserAmount = 0;
 
-int checkUserNameTable(const char * username)
-{
-	int i;
-	//todo: keep track of current user amount
-	for (i = 0; i < MAX_USERS; i++)
-	{
-		int cmp = stricmp(username, usernames[i]);
-		if (!cmp)
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-char * enterPassword()
-{
-	char * password = (char *)calloc(sizeof(char) * MAX_PASSWORD_LENGTH);
-	char format[80];
 
-	sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH);
-	scanf(format, password);
-	return password;
-}
+int checkUserNameTable(const char * username);
+
+char * enterPassword();
+
+char * enterUsername();
+
+void WriteToFile();
 
 int main()
 {
 	while (1){
 		int entryCount = 0;
-		char name[MAX_USERNAME_LENGTH];
-		while (1)
-		{
-			printf("Enter your username:\n");
-			char format[80];
-			sprintf(format, "%%%ds", MAX_USERNAME_LENGTH);
-			scanf(format, &name);
-			fflush(stdin);
-			if (strlen(name) < 4)
-			{
-				printf("Username must be at least 4 characters.\n");
-				memset(name, 0, sizeof(char) * MAX_USERNAME_LENGTH);
-			}
-			else
-			{
-				break;
+
+
+		char * name = 0;
+		while (name == 0){
+			name = enterUsername();
+			if (name == -1) {
+				WriteToFile();
+				return 0;
 			}
 		}
+			
 
 		int usernameIndex = checkUserNameTable(name);
 		if (usernameIndex == -1)
@@ -114,6 +92,57 @@ int main()
 		
 	}
 	return 0;
+}
+
+int checkUserNameTable(const char * username)
+{
+	int i;
+	//todo: keep track of current user amount
+	for (i = 0; i < MAX_USERS; i++)
+	{
+		int cmp = stricmp(username, usernames[i]);
+		if (!cmp)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+char * enterPassword()
+{
+	char * password = (char *)calloc(sizeof(char) * MAX_PASSWORD_LENGTH);
+	char format[80];
+
+	sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH);
+	scanf(format, password);
+	return password;
+}
+char * enterUsername()
+{
+	char * name = (char*)calloc(sizeof(char)*MAX_USERNAME_LENGTH);
+	printf("Enter your username, Type 0 to exit:\n");
+	char format[80];
+	sprintf(format, "%%%ds", MAX_USERNAME_LENGTH);
+	scanf(format, name);
+	fflush(stdin);
+	if (strcmp("0", name) == 0){
+		return -1;
+	}
+	if (strlen(name) < 4)
+	{
+		printf("Username must be at least 4 characters.\n");
+		//memset(name, 0, sizeof(char) * MAX_USERNAME_LENGTH);
+		free(name);
+		return 0;
+	}
+	else
+	{
+		return name;
+	}
+}
+
+void WriteToFile(){
+	//TODO: Write the Grid to a file.
 }
 
 
