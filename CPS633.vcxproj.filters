@@ -21,6 +21,9 @@
     <ClCompile Include="ClientResponseAuth.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HashFunctions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HashFunctions.h">

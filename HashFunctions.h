@@ -1,26 +1,20 @@
+//Visual Studio flags:
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning (disable:4996)
+
+//Assignment Consts
+#define MAX_USERS 100
+#define MAX_USERNAME_LENGTH 32
+#define MAX_PASSWORD_LENGTH 12
+#define MAX_LOGIN_ATTEMPTS 3
+
 #include <stdio.h>
-void strToUpper(char * str)
-{
-	while (*str)
-	{
-		*str = toupper(*str);
-		str++;
-	}
-}
-/********************* E function *************************/
-// DES replacement cipher
-// The function E takes 4 bytes from *in as input and
-// writes 4 bytes to *out
-void E(char *in, char *out)
-{
-	out[0] = (in[0] & 0x80) ^ (((in[0] >> 1) & 0x7F) ^ ((in[0]) & 0x7F));
-	out[1] = ((in[1] & 0x80) ^ ((in[0] << 7) & 0x80)) ^ (((in[1] >> 1) & 0x7F) ^ ((in[1]) & 0x7F));
-	out[2] = ((in[2] & 0x80) ^ ((in[1] << 7) & 0x80)) ^ (((in[2] >> 1) & 0x7F) ^ ((in[2]) & 0x7F));
-	out[3] = ((in[3] & 0x80) ^ ((in[2] << 7) & 0x80)) ^ (((in[3] >> 1) & 0x7F) ^ ((in[3]) & 0x7F));
-}
-void Hashify(char * password){
-	strToUpper(password);
-	E(password, password);
-	E(&password[4], &password[4]);
-	E(&password[8], &password[8]);
-}
+
+
+void strToUpper(char * str);
+void E(char *in, char *out);
+void Hashify(char * password);
+int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USERNAME_LENGTH]);
+char * enterPassword();
+char * enterUsername();
+void WriteToFile();

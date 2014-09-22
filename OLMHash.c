@@ -1,38 +1,20 @@
-#define _CRT_SECURE_NO_WARNINGS
-#pragma warning (disable:4996)
-#include <stdio.h>
+
 #include <string.h>
 #include "HashFunctions.h"
-
-#define MAX_USERS 100
-#define MAX_USERNAME_LENGTH 32
-#define MAX_PASSWORD_LENGTH 12
-#define MAX_LOGIN_ATTEMPTS 3
-
-void handleNewUser(const char * username);
-
-void handleExistingUser(const char * username, int usernameIndex);
-
-int checkUserNameTable(const char * username);
-
-char * enterPassword();
-
-char * enterUsername();
-
-void WriteToFile();
 
 char usernames[MAX_USERS][MAX_USERNAME_LENGTH];
 char passwords[MAX_USERS][MAX_PASSWORD_LENGTH];
 int attempts[MAX_USERS];
 int currentUserAmount = 0;
-
+void handleExistingUser(const char * username, int usernameIndex);
+void handleNewUser(const char * username);
 int main()
 {
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
 		char * name = 0;
 		while (name == 0){
-			//attemps to get another valid username from the user
+			//attempts to get another valid username from the user
 			name = enterUsername();
 			//if user enters 0, we write the tables to file and exit the program
 			if (name == -1) {
@@ -42,7 +24,7 @@ int main()
 		}
 			
 		//with the inputted username, we check if it exist in the table (and retrieve the index of the table if so)
-		int usernameIndex = checkUserNameTable(name);
+		int usernameIndex = checkUserNameTable(name, usernames);
 		//if the username was not found on the table
 		if (usernameIndex == -1)
 		{
@@ -56,6 +38,7 @@ int main()
 	}
 	return 0;
 }
+
 void handleNewUser(const char * username)
 {
 	//ask user to enter new password for new user account
@@ -106,70 +89,3 @@ void handleExistingUser(const char * username, int usernameIndex)
 		printf("User Account Locked, please contact SysAdmin at ENG-246.\n\n");
 	}
 }
-
-//check for the index of the username in the table
-int checkUserNameTable(const char * username)
-{
-	int i;
-	//for every username in the table
-	for (i = 0; i < MAX_USERS; i++)
-	{
-		//if the usernames are equal, return the index
-		int cmp = stricmp(username, usernames[i]);
-		if (cmp == 0)
-		{
-			return i;
-		}
-	}
-	//if username was not found, return -1 indicating so
-	return -1;
-}
-//read input from user as a password with a maximum length
-char * enterPassword()
-{
-	//allocate a string
-	char * password = (char *)calloc(sizeof(char) * MAX_PASSWORD_LENGTH);
-	char format[80];
-	//create a format string that will only accept up to the maximum password length
-	sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH);
-	//use that format string to read the password in from the user
-	scanf(format, password);
-	return password;
-}
-//read input from user as a username with a max and min length
-char * enterUsername()
-{
-	//allocate a string of the max username length
-	char * name = (char*)calloc(sizeof(char)*MAX_USERNAME_LENGTH);
-	printf("Enter your username, Type 0 to exit:\n");
-	char format[80];
-	//create format string for reading in the max length
-	sprintf(format, "%%%ds", MAX_USERNAME_LENGTH);
-	//use that format string to read name
-	scanf(format, name);
-	//flush the overflow
-	fflush(stdin);
-	//if the user entered 0, return -1 to signal the end of program
-	if (strcmp("0", name) == 0){
-		return -1;
-	}
-	//if the name is less than 4 characters, free the memory and return 0 to indicate the input was invalid
-	if (strlen(name) < 4)
-	{
-		printf("Username must be at least 4 characters.\n");
-		free(name);
-		return 0;
-	}
-	//return the valid username
-	else
-	{
-		return name;
-	}
-}
-
-void WriteToFile(){
-	//TODO: Write the Grid to a file.
-}
-
-
-
