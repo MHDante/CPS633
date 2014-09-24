@@ -9,6 +9,7 @@
 #define MAX_LOGIN_ATTEMPTS 3
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 void strToUpper(char * str);

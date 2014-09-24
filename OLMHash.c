@@ -8,7 +8,7 @@ int attempts[MAX_USERS];
 int currentUserAmount = 0;
 void handleExistingUser(const char * username, int usernameIndex);
 void handleNewUser(const char * username);
-int main2()
+int main()
 {
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.

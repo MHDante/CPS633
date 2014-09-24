@@ -34,7 +34,7 @@ int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USER
 	for (i = 0; i < MAX_USERS; i++)
 	{
 		//if the usernames are equal, return the index
-		int cmp = stricmp(username, usernames[i]);
+		int cmp = strcasecmp(username, usernames[i]);
 		if (cmp == 0)
 		{
 			return i;
@@ -47,7 +47,7 @@ int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USER
 char * enterPassword()
 {
 	//allocate a string
-	char * password = (char *)calloc(sizeof(char) * MAX_PASSWORD_LENGTH);
+	char * password = (char *)calloc(sizeof(char),  MAX_PASSWORD_LENGTH);
 	char format[80];
 	//create a format string that will only accept up to the maximum password length
 	sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH);
@@ -59,7 +59,7 @@ char * enterPassword()
 char * enterUsername()
 {
 	//allocate a string of the max username length
-	char * name = (char*)calloc(sizeof(char)*MAX_USERNAME_LENGTH);
+	char * name = (char*)calloc(sizeof(char), MAX_USERNAME_LENGTH);
 	printf("Enter your username, Type 0 to exit:\n");
 	char format[80];
 	//create format string for reading in the max length
