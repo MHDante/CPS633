@@ -1,17 +1,21 @@
 
 #include "HashFunctions.h"
 
+
 void handleNewUser2(const char * username);
 
-//void handleExistingUser(const char * username, int usernameIndex);
+void handleExistingUserCRA(const char * username, int usernameIndex);
+char * generateRandXOR(char* hash, int r);
+void R(char* in, char* out, int r);
 
 char usernames[MAX_USERS][MAX_USERNAME_LENGTH];
 char passwords[MAX_USERS][MAX_PASSWORD_LENGTH];
 int attempts[MAX_USERS];
 int currentUserAmount2 = 0;
 
-int main2()
+int main()
 {
+	srand(time(NULL));
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
 		char * name = 0;
@@ -36,7 +40,7 @@ int main2()
 		//if the username was already found on the table
 		else
 		{
-			//handleExistingUser(name, usernameIndex);
+			handleExistingUserCRA(name, usernameIndex);
 		}
 	}
 	return 0;
@@ -55,40 +59,56 @@ void handleNewUser2(const char * username)
 	currentUserAmount2++;
 	printf("User was added to the table!\n\n");
 }
-/*
-void handleExistingUser(const char * username, int usernameIndex)
+
+void handleExistingUserCRA(const char * username, int usernameIndex)
 {
-	//asks for user's password until they have exceeded their maximum login attempts
-	while (attempts[usernameIndex] < MAX_LOGIN_ATTEMPTS)
-	{
 		printf("Enter your password:\n");
 		//ask user to enter old password and check hash against stored hash in table
 		char * pw = enterPassword();
+
+		//int* a = (int*)pw;
+		//printf("pw = %s\n", pw);
+		//printf("*a = %d\n", *a);
+
 		//hash entered password
 		Hashify(pw);
-		//compare the entered hashed password against the hash saved in the table
-		int cmp = strcmp(pw, passwords[usernameIndex]);
+		//generates random number "on server side"
+		int r = rand();
+		//calculates new hash with number from server "on client side" and sends back to server
+		char* clientOut = generateRandXOR(pw, r);
+		//also calculates the xor'd number "on server side"
+		char* serverOut = generateRandXOR(passwords[usernameIndex], r);
+
+		//compare the the two xor'd password hashes "on server side"
+		int cmp = strcmp(clientOut, serverOut);
 		//if they are a match (correct password)
 		if (cmp == 0)
 		{
-			//reset the password attempts of that user
-			attempts[usernameIndex] = 0;
-			//prompt user for new password
-			printf("User Authenticated, Enter new password:\n");
-			char * npw = enterPassword();
-			//hash the new password
-			Hashify(npw);
-			//store it in the table
-			strcpy(passwords[usernameIndex], npw);
-			printf("User's password was updated!\n\n");
-			break;
+			printf("access granted\n");
 		}
-		//increment user's attempts to enter password and try again
-		printf("Incorrect password, please try again:!\n");
-		attempts[usernameIndex]++;
-	}
-	//if the user has exceeded their maximum login attempts, their account is locked and no more attempts are given
-	if (attempts[usernameIndex] >= MAX_LOGIN_ATTEMPTS){
-		printf("User Account Locked, please contact SysAdmin at ENG-246.\n\n");
-	}
-}*/
+		else
+		{
+			printf("access denied\n");
+		}
+
+}
+//xor the hash with the server's random number
+char * generateRandXOR(char* hash, int r)
+{
+	char * out = (char*)calloc(sizeof(char) * MAX_PASSWORD_LENGTH);
+	R(hash, out, r);
+	R(&hash[4], &out[4], r);
+	R(&hash[8], &out[8], r);
+	return out;
+}
+//xor function for each bundle (4 bytes)
+void R(char* in, char* out, int r)
+{
+	out[3] = in[3] ^ (r & 255);
+	r = r >> 8;
+	out[2] = in[2] ^ (r & 255);
+	r = r >> 8;
+	out[1] = in[1] ^ (r & 255);
+	r = r >> 8;
+	out[0] = in[0] ^ (r & 255);
+}
