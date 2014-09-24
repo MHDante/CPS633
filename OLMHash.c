@@ -1,5 +1,4 @@
 
-#include <string.h>
 #include "HashFunctions.h"
 
 char usernames[MAX_USERS][MAX_USERNAME_LENGTH];

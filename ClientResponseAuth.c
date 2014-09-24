@@ -13,7 +13,7 @@ char passwords[MAX_USERS][MAX_PASSWORD_LENGTH];
 int attempts[MAX_USERS];
 int currentUserAmount2 = 0;
 
-int main()
+int main2()
 {
 	srand(time(NULL));
 	while (1){
@@ -95,7 +95,7 @@ void handleExistingUserCRA(const char * username, int usernameIndex)
 //xor the hash with the server's random number
 char * generateRandXOR(char* hash, int r)
 {
-	char * out = (char*)calloc(sizeof(char) * MAX_PASSWORD_LENGTH);
+	char * out = (char*)calloc(sizeof(char) , MAX_PASSWORD_LENGTH);
 	R(hash, out, r);
 	R(&hash[4], &out[4], r);
 	R(&hash[8], &out[8], r);

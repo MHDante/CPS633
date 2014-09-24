@@ -34,7 +34,11 @@ int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USER
 	for (i = 0; i < MAX_USERS; i++)
 	{
 		//if the usernames are equal, return the index
+#ifdef _WIN32
+		int cmp = stricmp(username, usernames[i]);
+#else
 		int cmp = strcasecmp(username, usernames[i]);
+#endif
 		if (cmp == 0)
 		{
 			return i;
