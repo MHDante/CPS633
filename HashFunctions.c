@@ -54,9 +54,14 @@ char * enterPassword()
 	char * password = (char *)calloc(sizeof(char),  MAX_PASSWORD_LENGTH);
 	char format[80];
 	//create a format string that will only accept up to the maximum password length
-	sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH);
+	sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH-1); // Last byte must remain null.
 	//use that format string to read the password in from the user
 	scanf(format, password);
+	printf("password was: %s\n length is: %d", password, (int)strlen(password));
+	while(getchar() != '\n')  // Get rid of all the extra characters now...
+	{
+		// Loopy!
+	}
 	return password;
 }
 //read input from user as a username with a max and min length
@@ -67,11 +72,16 @@ char * enterUsername()
 	printf("Enter your username, Type 0 to exit:\n");
 	char format[80];
 	//create format string for reading in the max length
-	sprintf(format, "%%%ds", MAX_USERNAME_LENGTH);
+	sprintf(format, "%%%ds", MAX_USERNAME_LENGTH-1); // Last byte must remain null.
 	//use that format string to read name
 	scanf(format, name);
 	//flush the overflow
-	fflush(stdin);
+	printf("User name was: %s\n length is: %d", name, (int)strlen(name));
+	//fflush(stdin); // This is doing nothing.
+	while(getchar() != '\n')  // Get rid of all the extra characters now... Now that's a man's fflush.
+	{
+		// Loopy!
+	}
 	//if the user entered 0, return -1 to signal the end of program
 	if (strcmp("0", name) == 0){
 		return -1;
@@ -89,6 +99,45 @@ char * enterUsername()
 		return name;
 	}
 }
-void WriteToFile(){
+void WriteToFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH], int usercount){
 	//TODO: Write the Grid to a file.
+	FILE * output;
+	char newLine = '\n'; // fwrite wants a pointer... :(
+	if ((output = fopen("ignoreme.txt","w")) == NULL)
+	{
+		printf("Couldn't create output file!\n");
+		return;
+	}
+	usercount--; // Since it will initially point to an empty slot
+	while(usercount > -1) // Write all the usernames and hashes into the file.
+	{
+		if(fwrite((usernames[usercount]), sizeof(char), (strlen(usernames[usercount])), output) != strlen(usernames[usercount])) // Write in the username.
+		{
+			printf("Error writing to file! (1)\n");
+			fclose(output);
+			return;
+		}
+		if(fwrite(&newLine, sizeof(char), 1, output) != 1) // Newline!
+		{
+			printf("Error writing to file! (2)\n");
+			fclose(output);
+			return;
+		}
+		if(fwrite((passwords[usercount]), sizeof(char), (strlen(passwords[usercount])), output) != strlen(passwords[usercount])) // Write in the password hash.
+		{
+			printf("Error writing to file! (3)\n");
+			fclose(output);
+			return;
+		}
+		if(fwrite(&newLine, sizeof(char), 1, output) != 1) // Newline!
+		{
+			printf("Error writing to file! (4)\n");
+			fclose(output);
+			return;
+		}
+		usercount--; // Go write the next pair.
+	}
+	fclose(output);
+	printf("Written to disk!");
+	return;
 }

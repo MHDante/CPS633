@@ -2,10 +2,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning (disable:4996)
 
-//Assignment Consts
+//Assignment Consts, uname and pass length 1 greater to allow space for null byte.
 #define MAX_USERS 100
-#define MAX_USERNAME_LENGTH 32
-#define MAX_PASSWORD_LENGTH 12
+#define MAX_USERNAME_LENGTH 33
+#define MAX_PASSWORD_LENGTH 13
 #define MAX_LOGIN_ATTEMPTS 3
 
 #include <stdio.h>
@@ -19,4 +19,4 @@ void Hashify(char * password);
 int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USERNAME_LENGTH]);
 char * enterPassword();
 char * enterUsername();
-void WriteToFile();
+void WriteToFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH], int usercount);

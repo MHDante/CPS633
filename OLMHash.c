@@ -17,7 +17,7 @@ int main()
 			name = enterUsername();
 			//if user enters 0, we write the tables to file and exit the program
 			if (name == -1) {
-				WriteToFile();
+				WriteToFile(usernames, passwords, currentUserAmount);
 				return 0;
 			}
 		}
