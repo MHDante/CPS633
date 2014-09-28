@@ -1,5 +1,4 @@
 
-#include <string.h>
 #include "HashFunctions.h"
 
 char usernames[MAX_USERS][MAX_USERNAME_LENGTH];
@@ -32,7 +31,7 @@ int main()
 			continue;
 			//if user enters 0, we write the tables to file and exit the program
 			if (name == -1) {
-				WriteToFile();
+				WriteToFile(usernames, passwords, currentUserAmount);
 				return 0;
 			}
 		}
