@@ -8,7 +8,19 @@ int attempts[MAX_USERS];
 int currentUserAmount = 0;
 void handleExistingUser(const char * username, int usernameIndex);
 void handleNewUser(const char * username);
-int main2()
+
+
+void printBits(char c)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		int result = c & 1;
+		c = c >> 1;
+		printf("%d\n", result);
+	}
+}
+
+int main()
 {
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
@@ -16,6 +28,8 @@ int main2()
 		while (name == 0){
 			//attempts to get another valid username from the user
 			name = enterUsername();
+			//printBits(name[0]);
+			continue;
 			//if user enters 0, we write the tables to file and exit the program
 			if (name == -1) {
 				WriteToFile();
@@ -45,10 +59,10 @@ void handleNewUser(const char * username)
 	printf("User not found; Created user; Enter new user password:\n");
 	char * pw = enterPassword();
 	//hash the entered password
-	Hashify(pw);
+	char * hash = Hashify(3, pw);
 	//place the new user on the table with username and hashed password
 	strcpy(usernames[currentUserAmount], username);
-	strcpy(passwords[currentUserAmount], pw);
+	strcpy(passwords[currentUserAmount], hash);
 	//point to the next free spot on the table
 	currentUserAmount++;
 	printf("User was added to the table!\n\n");
@@ -62,9 +76,9 @@ void handleExistingUser(const char * username, int usernameIndex)
 		//ask user to enter old password and check hash against stored hash in table
 		char * pw = enterPassword();
 		//hash entered password
-		Hashify(pw);
+		char * hash = Hashify(3, pw);
 		//compare the entered hashed password against the hash saved in the table
-		int cmp = strcmp(pw, passwords[usernameIndex]);
+		int cmp = strcmp(hash, passwords[usernameIndex]);
 		//if they are a match (correct password)
 		if (cmp == 0)
 		{
@@ -74,9 +88,10 @@ void handleExistingUser(const char * username, int usernameIndex)
 			printf("User Authenticated, Enter new password:\n");
 			char * npw = enterPassword();
 			//hash the new password
-			Hashify(npw);
+			char * nhash = Hashify(3, npw);
+			//printf("%s",nhash);
 			//store it in the table
-			strcpy(passwords[usernameIndex], npw);
+			strcpy(passwords[usernameIndex], nhash);
 			printf("User's password was updated!\n\n");
 			break;
 		}

@@ -13,7 +13,7 @@
 
 void strToUpper(char * str);
 void E(char *in, char *out);
-void Hashify(char * password);
+char * Hashify(int n, char * password);
 int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USERNAME_LENGTH]);
 char * enterPassword();
 char * enterUsername();

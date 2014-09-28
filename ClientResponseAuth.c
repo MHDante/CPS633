@@ -13,7 +13,7 @@ char passwords[MAX_USERS][MAX_PASSWORD_LENGTH];
 int attempts[MAX_USERS];
 int currentUserAmount2 = 0;
 
-int main()
+int main3()
 {
 	srand(time(NULL));
 	while (1){
@@ -51,10 +51,10 @@ void handleNewUser2(const char * username)
 	printf("User not found; Created user; Enter new user password:\n");
 	char * pw = enterPassword();
 	//hash the entered password
-	Hashify(pw);
+	char * hash = Hashify(3, pw);
 	//place the new user on the table with username and hashed password
 	strcpy(usernames[currentUserAmount2], username);
-	strcpy(passwords[currentUserAmount2], pw);
+	strcpy(passwords[currentUserAmount2], hash);
 	//point to the next free spot on the table
 	currentUserAmount2++;
 	printf("User was added to the table!\n\n");
@@ -71,11 +71,11 @@ void handleExistingUserCRA(const char * username, int usernameIndex)
 		//printf("*a = %d\n", *a);
 
 		//hash entered password
-		Hashify(pw);
+		char * hash = Hashify(3, pw);
 		//generates random number "on server side"
 		int r = rand();
 		//calculates new hash with number from server "on client side" and sends back to server
-		char* clientOut = generateRandXOR(pw, r);
+		char* clientOut = generateRandXOR(hash, r);
 		//also calculates the xor'd number "on server side"
 		char* serverOut = generateRandXOR(passwords[usernameIndex], r);
 
@@ -104,6 +104,7 @@ char * generateRandXOR(char* hash, int r)
 //xor function for each bundle (4 bytes)
 void R(char* in, char* out, int r)
 {
+	char rr = r;
 	out[3] = in[3] ^ (r & 255);
 	r = r >> 8;
 	out[2] = in[2] ^ (r & 255);
@@ -112,3 +113,11 @@ void R(char* in, char* out, int r)
 	r = r >> 8;
 	out[0] = in[0] ^ (r & 255);
 }
+
+
+
+
+//0010110101
+//1101011001
+//			&
+//1111101100

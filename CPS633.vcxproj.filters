@@ -24,6 +24,9 @@
     <ClCompile Include="HashFunctions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OPass.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HashFunctions.h">

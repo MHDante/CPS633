@@ -19,11 +19,21 @@ void E(char *in, char *out)
 	out[2] = ((in[2] & 0x80) ^ ((in[1] << 7) & 0x80)) ^ (((in[2] >> 1) & 0x7F) ^ ((in[2]) & 0x7F));
 	out[3] = ((in[3] & 0x80) ^ ((in[2] << 7) & 0x80)) ^ (((in[3] >> 1) & 0x7F) ^ ((in[3]) & 0x7F));
 }
-void Hashify(char * password){
-	strToUpper(password);
-	E(password, password);
-	E(&password[4], &password[4]);
-	E(&password[8], &password[8]);
+char * Hashify(int n, char * password){
+	char * hash = (char*)calloc(MAX_PASSWORD_LENGTH, sizeof(char));
+	if (hash == NULL)
+	{
+		printf("calloc returned NULL in hashify\n");
+		return hash;
+	}
+	strcpy(hash, password);
+	strToUpper(hash);
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		E(&hash[4*i], &hash[4*i]);
+	}
+	return hash;
 }
 
 //check for the index of the username in the table

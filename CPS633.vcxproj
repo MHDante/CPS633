@@ -53,6 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/F 10000000000000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -81,6 +82,7 @@
     <ClCompile Include="ClientResponseAuth.c" />
     <ClCompile Include="HashFunctions.c" />
     <ClCompile Include="OLMHash.c" />
+    <ClCompile Include="OPass.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HashFunctions.h" />
