@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="ClientResponseAuth.c" />
     <ClCompile Include="HashFunctions.c" />
+    <ClCompile Include="Main.c" />
     <ClCompile Include="OLMHash.c" />
     <ClCompile Include="OPass.c" />
   </ItemGroup>

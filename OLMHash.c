@@ -19,8 +19,9 @@ void printBits(char c)
 	}
 }
 
-int main()
+int olmHash()
 {
+	ReadFromFile(usernames, passwords);
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
 		char * name = 0;
@@ -28,14 +29,13 @@ int main()
 			//attempts to get another valid username from the user
 			name = enterUsername();
 			//printBits(name[0]);
-			continue;
+			//continue;
 			//if user enters 0, we write the tables to file and exit the program
 			if (name == -1) {
 				WriteToFile(usernames, passwords, currentUserAmount);
 				return 0;
 			}
 		}
-			
 		//with the inputted username, we check if it exist in the table (and retrieve the index of the table if so)
 		int usernameIndex = checkUserNameTable(name, usernames);
 		//if the username was not found on the table

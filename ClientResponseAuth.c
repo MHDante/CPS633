@@ -13,8 +13,9 @@ char passwords[MAX_USERS][MAX_PASSWORD_LENGTH];
 int attempts[MAX_USERS];
 int currentUserAmount2 = 0;
 
-int main3()
+int clientResponseAuth()
 {
+	ReadFromFile(usernames, passwords);
 	srand(time(NULL));
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
@@ -25,7 +26,7 @@ int main3()
 			name = enterUsername();
 			//if user enters 0, we write the tables to file and exit the program
 			if (name == -1) {
-				WriteToFile();
+				WriteToFile(usernames, passwords, currentUserAmount2);
 				return 0;
 			}
 		}
@@ -95,7 +96,7 @@ void handleExistingUserCRA(const char * username, int usernameIndex)
 //xor the hash with the server's random number
 char * generateRandXOR(char* hash, int r)
 {
-	char * out = (char*)calloc(sizeof(char) , MAX_PASSWORD_LENGTH);
+	char * out = (char*)calloc(MAX_PASSWORD_LENGTH, sizeof(char));
 	R(hash, out, r);
 	R(&hash[4], &out[4], r);
 	R(&hash[8], &out[8], r);
@@ -105,19 +106,11 @@ char * generateRandXOR(char* hash, int r)
 void R(char* in, char* out, int r)
 {
 	char rr = r;
-	out[3] = in[3] ^ (r & 255);
-	r = r >> 8;
+	out[3] = in[3] ^ (r & 255); //xor the first byte with r's first byte
+	r = r >> 8; //shift r by one byte
 	out[2] = in[2] ^ (r & 255);
 	r = r >> 8;
 	out[1] = in[1] ^ (r & 255);
 	r = r >> 8;
 	out[0] = in[0] ^ (r & 255);
 }
-
-
-
-
-//0010110101
-//1101011001
-//			&
-//1111101100

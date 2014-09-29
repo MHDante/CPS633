@@ -1,133 +1,90 @@
-
 #include "HashFunctions.h"
 
 #define MAX_PASS_PART3 4
 #define TABLE_LENGTH 456976
-//#define TABLE_LENGTH 676 
-//26 ^ 4
-//void handleNewUser2(const char * username);
-//void handleExistingUserCRA(const char * username, int usernameIndex);
-//char * generateRandXOR(char* hash, int r);
-//void R(char* in, char* out, int r);
-//void populateHashes();
-//void traverseHashes();
-//void recurse(char ** passwords, char** hashes, char * pass, int index, int max);
 void recurse(char * pass, int index, int max);
 int initArray(char** arr, int rows, int columns);
 void mStrCpy(int size, char* dest, char* src);
-
-//int table_length;
-
 char passwords[TABLE_LENGTH][MAX_PASS_PART3 + 1];
 char hashes[TABLE_LENGTH][MAX_PASS_PART3 + 1];
 
-int mainx()
+int oPass()
 {
-	
-	char * p = (char*)calloc(MAX_PASS_PART3 + 1);
+	//allocate an initial password string
+	char * p = (char*)calloc(MAX_PASS_PART3 + 1, sizeof(char));
+	//set the last character to null terminator
 	p[MAX_PASS_PART3] = 0;
-	printf("Writing pass:%s\n", p);
-
+	//call the recurse function to populate the entire dictionary with hashes and passwords
 	recurse(p, 0, MAX_PASS_PART3);
+	//take input of hashes to output passwords
 	while (1){
 		//allocate a string of the max username length
-		char * hash = (char*)calloc(sizeof(char)*MAX_PASSWORD_LENGTH);
-		printf("Enter a hash for a four digit password, Type 0 to exit:\n");
-		char format[80];
-		//create format string for reading in the max length
-		sprintf(format, "%%%ds", MAX_PASSWORD_LENGTH);
-		//use that format string to read name
-		scanf(format, hash);
+		char * hash = (char*)calloc(12, sizeof(char));
+		printf("Enter a hash for a four character password, Type 0 to exit:\n");
+		scanf("%10s", hash);
+		char c;
+		//flush additional characters
+		do { c = getchar(); } while (c != '\n' && c != '\0');
 		//flush the overflow
 		fflush(stdin);
 		//if the user entered 0, return -1 to signal the end of program
 		if (strcmp("0", hash) == 0){
 			return -1;
 		}
-		int i;
-		for (i = 0; i < MAX_PASSWORD_LENGTH; i++)
+		//if the length of the hash is not four, free the password memory and ask user to try again
+		if (strlen(hash) != 4)
 		{
-
+			printf("This hash does not map to a four character long password.\nThe hash must also be four characters. Please try again.\n");
+			free(hash);
+			continue;
+		}
+		int i;
+		int found = 0;
+		//search the entire table for the input hash to output the plaintex password
+		for (i = 0; i < TABLE_LENGTH; i++)
+		{
+			//if the table entry matches the input
+			if (strcmp(hashes[i], hash) == 0)
+			{
+				//output the plaintext password
+				printf("For the hash (%s), the password is: %s\n", hash, passwords[i]);
+				found = 1;
+				break;
+			}
+		}
+		//if the hash was not found onthe table, inform the user.
+		if (found == 0)
+		{
+			printf("For the hash (%s), no password was found.\n", hash);
 		}
 	}
-
-
 	return 0;
 }
-//int depth = 0;
 int tablePosition = 0;
-//void recurse(char ** passwords, char** hashes, char * pass, int index, int max)
+//populates all hashes for every possible password
 void recurse(char * pass, int index, int max)
 {
-	//depth++;
-	//printf("%d\n",depth);
+	//base case; after four characters have been put into the string, save that string on the table
 	if (index >= max)
 	{
-		//printf("%d,", tablePosition);
-		//printf("%s\n", pass);
-		//char* newPass = (char*)malloc(max+1);
-		//6473839666
-		mStrCpy(4,passwords[tablePosition], pass);
-		//passwords[tablePosition] = newPass;
-		//calculuate hash and throw in table
-		//char* temp = (char*)calloc(max + 1);
-		//mStrCpy(4, temp, pass);
+		//copy the generated password onto the table
+		strncpy(passwords[tablePosition], pass, 4);
+		//hash the password
 		char * hash = Hashify(1, pass);
-		//char* newHash = (char*)malloc(max + 1);
-
-		mStrCpy(4, hashes[tablePosition], hash);
-
-		printf("Writing pass:%s   hash:%s    pos:%d\n", pass, hash, tablePosition);
-		//hashes[tablePosition] = hash;
+		//copy the hash into the table
+		strncpy(hashes[tablePosition], hash, 4);
+		//increment the table index position
 		tablePosition++;
 	}
 	else
 	{
+		//at any given index of the word, cycle through every character from A - Z,
+		//store that character in the string, and recurse into the next index of the word (and do the same)
 		for (int i = 0; i < 26; i++)
 		{
-			char a = 0; 'A' + i;
+			char a = 'A' + i;
 			pass[index] = a;
-			//recurse(passwords, hashes, pass, index + 1, max);
 			recurse(pass, index + 1, max);
 		}
 	}
-	//depth--;
-}
-//void traverseHashes()
-//{
-//	for (int i = 0; i < MAX_PASS_PART3; i++)
-//	{
-//		printf("%s : %s\n", passwords[i], hashes[i]);
-//	}
-//}
-
-int initArray(char** arr, int rows, int columns)
-{
-	if ((arr = (char**)malloc(sizeof(char*) * rows)) == NULL)
-	{
-		printf("Damn.");
-		return -1;
-	}
-	for (int i = 0; i < rows; i++)
-	{
-		if ((arr[i] = (char*)malloc(sizeof(char)*columns)) == NULL){
-			printf("Damn^2.");
-			for (; i > 0; i--)
-			{
-				free(arr[i]);
-			}
-			free(arr);
-			return -1;
-		}
-	}
-	return 1;
-}
-
-void mStrCpy(int size, char* dest, char* src){
-	int i;
-	for (i = 0; i < size; i++){
-		dest[i] = src[i];
-		if (src[i] == 0) break;
-	}
-	src[i] = 0;
 }
