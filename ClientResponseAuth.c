@@ -15,7 +15,7 @@ int currentUserAmount2 = 0;
 
 int clientResponseAuth()
 {
-	ReadFromFile(usernames, passwords);
+	currentUserAmount2 = ReadFromFile(usernames, passwords);
 	srand(time(NULL));
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
@@ -105,7 +105,6 @@ char * generateRandXOR(char* hash, int r)
 //xor function for each bundle (4 bytes)
 void R(char* in, char* out, int r)
 {
-	char rr = r;
 	out[3] = in[3] ^ (r & 255); //xor the first byte with r's first byte
 	r = r >> 8; //shift r by one byte
 	out[2] = in[2] ^ (r & 255);

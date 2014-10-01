@@ -21,7 +21,7 @@ void printBits(char c)
 
 int olmHash()
 {
-	ReadFromFile(usernames, passwords);
+	currentUserAmount = ReadFromFile(usernames, passwords);
 	while (1){
 		//Checks for initial input (a username), when a valid input is given, the program proceeds.
 		char * name = 0;

@@ -19,7 +19,7 @@ char * Hashify(int n, char * password);
 int checkUserNameTable(const char * username, char usernames[MAX_USERS][MAX_USERNAME_LENGTH]);
 char * enterPassword();
 char * enterUsername();
-void ReadFromFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH]);
+int ReadFromFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH]);
 void WriteToFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH], int usercount);
 
 int olmHash();

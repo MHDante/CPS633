@@ -67,10 +67,13 @@ void recurse(char * pass, int index, int max)
 	//base case; after four characters have been put into the string, save that string on the table
 	if (index >= max)
 	{
+		
+
 		//copy the generated password onto the table
 		strncpy(passwords[tablePosition], pass, 4);
 		//hash the password
 		char * hash = Hashify(1, pass);
+		printf("%s : %s\n", pass, hash);
 		//copy the hash into the table
 		strncpy(hashes[tablePosition], hash, 4);
 		//increment the table index position

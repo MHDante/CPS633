@@ -114,7 +114,7 @@ char * enterUsername()
 	}
 }
 //read from file (if exists) and populate the tables
-void ReadFromFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH])
+int ReadFromFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH])
 {
 	FILE * file;
 	char line[80];
@@ -143,6 +143,7 @@ void ReadFromFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords
 		counter++;
 	}
 	fclose(file);
+	return counter / 2;
 }
 
 void WriteToFile(char usernames[MAX_USERS][MAX_USERNAME_LENGTH], char passwords[MAX_USERS][MAX_PASSWORD_LENGTH], int usercount){
